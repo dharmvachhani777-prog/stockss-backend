@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: nifty-stock-predictor
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: gunicorn --chdir backend --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /health

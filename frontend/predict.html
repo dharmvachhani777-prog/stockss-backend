@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StockML - Stock Price Prediction</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Choices.js CSS -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+    />
+
+    <style>
+
+        body {
+            background-color: #f0f4f8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1e293b;
+            padding-top: 1.5rem;
+            padding-bottom: 3rem;
+        }
+
+        .stockml-navbar {
+            background: #ffffff;
+            border-radius: 50px;
+            padding: 10px 24px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .brand-logo {
+            background: #e0e7ff;
+            border-radius: 8px;
+            padding: 6px;
+            display: inline-flex;
+        }
+
+        .nav-link-custom {
+            color: #334155;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-decoration: none;
+            padding: 0 16px;
+        }
+
+        .nav-link-custom:hover {
+            color: #6366f1;
+        }
+
+        .btn-predict-nav {
+            background-color: #e5532c;
+            color: #ffffff;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-predict-nav:hover {
+            background-color: #d0431d;
+            color: #ffffff;
+        }
+
+        .glass-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            padding: 2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #475569;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+            padding: 0.65rem 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        .choices__inner {
+            border-radius: 12px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background-color: #ffffff !important;
+            padding: 0.4rem 0.8rem !important;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+        }
+
+        .choices__input {
+            background-color: transparent !important;
+            font-size: 0.95rem;
+        }
+
+        .choices__list--dropdown {
+            border-radius: 12px !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #e5532c 0%, #d0431d 100%);
+            color: white;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            width: 100%;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.92;
+        }
+
+        .result-card {
+            background: #f8fafc;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .result-price {
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas,
+                "Liberation Mono", "Courier New", monospace;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 0.25rem;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <!-- Navigation Bar -->
+
+        <div class="stockml-navbar d-flex justify-content-between align-items-center">
+
+            <div class="d-flex align-items-center gap-2">
+
+                <div class="brand-logo">
+
+                    <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#6366f1"
+                        stroke-width="2.5"
+                    >
+
+                        <path d="M3 3v18h18"/>
+                        <path d="M18.5 8.5L13.5 13.5L9.5 9.5L4.5 14.5"/>
+
+                    </svg>
+
+                </div>
+
+                <!-- Vercel page link -->
+                <a
+                    href="index.html"
+                    class="fw-bold fs-5 text-dark text-decoration-none"
+                >
+                    StockML
+                </a>
+
+            </div>
+
+
+            <div class="d-none d-md-flex align-items-center">
+
+                <!-- Vercel page links -->
+
+                <a
+                    href="eda.html"
+                    class="nav-link-custom"
+                >
+                    Data Insights
+                </a>
+
+                <a
+                    href="model_info.html"
+                    class="nav-link-custom"
+                >
+                    Model Info
+                </a>
+
+            </div>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <a
+                    href="predict.html"
+                    class="btn-predict-nav"
+                >
+                    Predict Now ↗
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Form & Output Section -->
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-10">
+
+
+                <!-- Input Form Card -->
+
+                <div class="glass-card mb-4">
+
+                    <h4 class="fw-bold mb-1">
+                        NIFTY 50 Stock Predictor
+                    </h4>
+
+                    <p class="text-secondary small mb-4">
+                        Search any company name or ticker symbol to generate forecasts.
+                    </p>
+
+
+                    <!-- IMPORTANT:
+                         JavaScript handles the form.
+                         No action="/predict".
+                    -->
+
+                    <form
+                        id="predictionForm"
+                        onsubmit="event.preventDefault(); predictStock();"
+                    >
+
+                        <div class="row g-3 mb-4">
+
+
+                            <!-- Company/Ticker Selector -->
+
+                            <div class="col-12">
+
+                                <label class="form-label">
+                                    Company / Ticker (Type to search)
+                                </label>
+
+
+                                <select
+                                    id="ticker"
+                                    required
+                                >
+
+                                    <option value="">
+                                        -- Type Company Name or Ticker --
+                                    </option>
+
+                                    <option value="ADANIENT.NS">
+                                        Adani Enterprises (ADANIENT.NS)
+                                    </option>
+
+                                    <option value="ADANIPORTS.NS">
+                                        Adani Ports (ADANIPORTS.NS)
+                                    </option>
+
+                                    <option value="APOLLOHOSP.NS">
+                                        Apollo Hospitals (APOLLOHOSP.NS)
+                                    </option>
+
+                                    <option value="ASIANPAINT.NS">
+                                        Asian Paints (ASIANPAINT.NS)
+                                    </option>
+
+                                    <option value="AXISBANK.NS">
+                                        Axis Bank (AXISBANK.NS)
+                                    </option>
+
+                                    <option value="BAJAJ-AUTO.NS">
+                                        Bajaj Auto (BAJAJ-AUTO.NS)
+                                    </option>
+
+                                    <option value="BAJFINANCE.NS">
+                                        Bajaj Finance (BAJFINANCE.NS)
+                                    </option>
+
+                                    <option value="BAJAJFINSV.NS">
+                                        Bajaj Finserv (BAJAJFINSV.NS)
+                                    </option>
+
+                                    <option value="BEL.NS">
+                                        Bharat Electronics (BEL.NS)
+                                    </option>
+
+                                    <option value="BHARTIARTL.NS">
+                                        Bharti Airtel (BHARTIARTL.NS)
+                                    </option>
+
+                                    <option value="BPCL.NS">
+                                        Bharat Petroleum (BPCL.NS)
+                                    </option>
+
+                                    <option value="CIPLA.NS">
+                                        Cipla (CIPLA.NS)
+                                    </option>
+
+                                    <option value="COALINDIA.NS">
+                                        Coal India (COALINDIA.NS)
+                                    </option>
+
+                                    <option value="DRREDDY.NS">
+                                        Dr. Reddy's Labs (DRREDDY.NS)
+                                    </option>
+
+                                    <option value="EICHERMOT.NS">
+                                        Eicher Motors (EICHERMOT.NS)
+                                    </option>
+
+                                    <option value="GRASIM.NS">
+                                        Grasim Industries (GRASIM.NS)
+                                    </option>
+
+                                    <option value="HCLTECH.NS">
+                                        HCL Technologies (HCLTECH.NS)
+                                    </option>
+
+                                    <option value="HDFCBANK.NS">
+                                        HDFC Bank (HDFCBANK.NS)
+                                    </option>
+
+                                    <option value="HDFCLIFE.NS">
+                                        HDFC Life Insurance (HDFCLIFE.NS)
+                                    </option>
+
+                                    <option value="HEROMOTOCO.NS">
+                                        Hero MotoCorp (HEROMOTOCO.NS)
+                                    </option>
+
+                                    <option value="HINDALCO.NS">
+                                        Hindalco Industries (HINDALCO.NS)
+                                    </option>
+
+                                    <option value="HINDUNILVR.NS">
+                                        Hindustan Unilever (HINDUNILVR.NS)
+                                    </option>
+
+                                    <option value="ICICIBANK.NS">
+                                        ICICI Bank (ICICIBANK.NS)
+                                    </option>
+
+                                    <option value="INDUSINDBK.NS">
+                                        IndusInd Bank (INDUSINDBK.NS)
+                                    </option>
+
+                                    <option value="INFY.NS">
+                                        Infosys (INFY.NS)
+                                    </option>
+
+                                    <option value="ITC.NS">
+                                        ITC Limited (ITC.NS)
+                                    </option>
+
+                                    <option value="JIOFIN.NS">
+                                        Jio Financial Services (JIOFIN.NS)
+                                    </option>
+
+                                    <option value="JSWSTEEL.NS">
+                                        JSW Steel (JSWSTEEL.NS)
+                                    </option>
+
+                                    <option value="KOTAKBANK.NS">
+                                        Kotak Mahindra Bank (KOTAKBANK.NS)
+                                    </option>
+
+                                    <option value="LT.NS">
+                                        Larsen & Toubro (LT.NS)
+                                    </option>
+
+                                    <option value="M&M.NS">
+                                        Mahindra & Mahindra (M&M.NS)
+                                    </option>
+
+                                    <option value="MARUTI.NS">
+                                        Maruti Suzuki (MARUTI.NS)
+                                    </option>
+
+                                    <option value="NESTLEIND.NS">
+                                        Nestle India (NESTLEIND.NS)
+                                    </option>
+
+                                    <option value="NTPC.NS">
+                                        NTPC Limited (NTPC.NS)
+                                    </option>
+
+                                    <option value="ONGC.NS">
+                                        ONGC (ONGC.NS)
+                                    </option>
+
+                                    <option value="POWERGRID.NS">
+                                        Power Grid Corp (POWERGRID.NS)
+                                    </option>
+
+                                    <option value="RELIANCE.NS">
+                                        Reliance Industries (RELIANCE.NS)
+                                    </option>
+
+                                    <option value="SBIN.NS">
+                                        State Bank of India (SBIN.NS)
+                                    </option>
+
+                                    <option value="SHRIRAMFIN.NS">
+                                        Shriram Finance (SHRIRAMFIN.NS)
+                                    </option>
+
+                                    <option value="SUNPHARMA.NS">
+                                        Sun Pharma (SUNPHARMA.NS)
+                                    </option>
+
+                                    <option value="TATACONSUM.NS">
+                                        Tata Consumer Products (TATACONSUM.NS)
+                                    </option>
+
+                                    <option value="TATAMOTORS.NS">
+                                        Tata Motors (TATAMOTORS.NS)
+                                    </option>
+
+                                    <option value="TATASTEEL.NS">
+                                        Tata Steel (TATASTEEL.NS)
+                                    </option>
+
+                                    <option value="TCS.NS">
+                                        Tata Consultancy Services (TCS.NS)
+                                    </option>
+
+                                    <option value="TECHM.NS">
+                                        Tech Mahindra (TECHM.NS)
+                                    </option>
+
+                                    <option value="TITAN.NS">
+                                        Titan Company (TITAN.NS)
+                                    </option>
+
+                                    <option value="TRENT.NS">
+                                        Trent Limited (TRENT.NS)
+                                    </option>
+
+                                    <option value="ULTRACEMCO.NS">
+                                        UltraTech Cement (ULTRACEMCO.NS)
+                                    </option>
+
+                                    <option value="WIPRO.NS">
+                                        Wipro (WIPRO.NS)
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Open -->
+
+                            <div class="col-md-4 col-lg-2-4">
+
+                                <label class="form-label">
+                                    Open Price (₹)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="open"
+                                    step="any"
+                                    class="form-control"
+                                    placeholder="0.00"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- High -->
+
+                            <div class="col-md-4 col-lg-2-4">
+
+                                <label class="form-label">
+                                    High Price (₹)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="high"
+                                    step="any"
+                                    class="form-control"
+                                    placeholder="0.00"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- Low -->
+
+                            <div class="col-md-4 col-lg-2-4">
+
+                                <label class="form-label">
+                                    Low Price (₹)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="low"
+                                    step="any"
+                                    class="form-control"
+                                    placeholder="0.00"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- Close -->
+
+                            <div class="col-md-6 col-lg-2-4">
+
+                                <label class="form-label">
+                                    Close Price (₹)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="close"
+                                    step="any"
+                                    class="form-control"
+                                    placeholder="0.00"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- Volume -->
+
+                            <div class="col-md-6 col-lg-2-4">
+
+                                <label class="form-label">
+                                    Trading Volume
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="volume"
+                                    step="any"
+                                    class="form-control"
+                                    placeholder="1000000"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn-submit"
+                        >
+                            Generate Predictions ↗
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- Forecast Output Card -->
+
+                <div
+                    class="glass-card"
+                    id="result-section"
+                    style="display: none;"
+                >
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h5 class="fw-bold mb-0">
+
+                            Forecast Results for
+
+                            <span
+                                class="text-primary"
+                                id="company-name"
+                            >
+                                -
+                            </span>
+
+                        </h5>
+
+                        <span
+                            class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2"
+                        >
+                            XGBoost Engine
+                        </span>
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+
+                        <!-- Tomorrow -->
+
+                        <div class="col-md-4 col-6">
+
+                            <div class="result-card">
+
+                                <div class="result-title">
+                                    Tomorrow
+                                </div>
+
+                                <div
+                                    class="result-price"
+                                    id="tomorrow"
+                                >
+                                    ₹--
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 1 Week -->
+
+                        <div class="col-md-4 col-6">
+
+                            <div class="result-card">
+
+                                <div class="result-title">
+                                    1 Week
+                                </div>
+
+                                <div
+                                    class="result-price"
+                                    id="week"
+                                >
+                                    ₹--
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 1 Month -->
+
+                        <div class="col-md-4 col-6">
+
+                            <div class="result-card">
+
+                                <div class="result-title">
+                                    1 Month
+                                </div>
+
+                                <div
+                                    class="result-price"
+                                    id="month"
+                                >
+                                    ₹--
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 2 Months -->
+
+                        <div class="col-md-6 col-6">
+
+                            <div class="result-card">
+
+                                <div class="result-title">
+                                    2 Months
+                                </div>
+
+                                <div
+                                    class="result-price"
+                                    id="two_month"
+                                >
+                                    ₹--
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- 6 Months -->
+
+                        <div class="col-md-6 col-12">
+
+                            <div class="result-card">
+
+                                <div class="result-title">
+                                    6 Months
+                                </div>
+
+                                <div
+                                    class="result-price"
+                                    id="six_month"
+                                >
+                                    ₹--
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Choices.js Library -->
+
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="config.js"></script>
+
+
+    <script>
+
+        // =====================================================
+        // API URL (same Flask server that serves this page)
+        // =====================================================
+
+        const API_URL = API_BASE_URL;
+
+
+        // =====================================================
+        // CHOICES.JS
+        // =====================================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const selectElement =
+                    document.getElementById("ticker");
+
+                if (selectElement) {
+
+                    new Choices(
+                        selectElement,
+                        {
+                            searchEnabled: true,
+                            searchChoices: true,
+                            itemSelectText: "",
+                            placeholder: true,
+                            placeholderValue:
+                                "Type company name or ticker..."
+                        }
+                    );
+
+                }
+
+            }
+        );
+
+
+        // =====================================================
+        // PREDICT STOCK
+        // =====================================================
+
+        async function predictStock() {
+
+            const ticker =
+                document.getElementById("ticker").value;
+
+            const open =
+                document.getElementById("open").value;
+
+            const high =
+                document.getElementById("high").value;
+
+            const low =
+                document.getElementById("low").value;
+
+            const close =
+                document.getElementById("close").value;
+
+            const volume =
+                document.getElementById("volume").value;
+
+
+            try {
+
+                const response = await fetch(
+                    API_URL + "/predict",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            ticker: ticker,
+
+                            open: open,
+
+                            high: high,
+
+                            low: low,
+
+                            close: close,
+
+                            volume: volume
+
+                        })
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                // If Flask sends an error
+
+                if (!response.ok || !data.success) {
+
+                    alert(
+                        data.message ||
+                        "Prediction failed."
+                    );
+
+                    return;
+
+                }
+
+
+                // Show result section
+
+                document.getElementById(
+                    "result-section"
+                ).style.display = "block";
+
+
+                // Company name
+
+                document.getElementById(
+                    "company-name"
+                ).innerText =
+                    data.company || ticker;
+
+
+                // Predictions
+
+                document.getElementById(
+                    "tomorrow"
+                ).innerText =
+                    "₹" + data.prediction.tomorrow;
+
+
+                document.getElementById(
+                    "week"
+                ).innerText =
+                    "₹" + data.prediction.one_week;
+
+
+                document.getElementById(
+                    "month"
+                ).innerText =
+                    "₹" + data.prediction.one_month;
+
+
+                document.getElementById(
+                    "two_month"
+                ).innerText =
+                    "₹" + data.prediction.two_month;
+
+
+                document.getElementById(
+                    "six_month"
+                ).innerText =
+                    "₹" + data.prediction.six_month;
+
+            }
+
+
+            catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to connect to prediction server."
+                );
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

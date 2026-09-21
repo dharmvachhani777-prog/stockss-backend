@@ -1,0 +1,32 @@
+                    JUPYTER 
+                       ↓ 
+              Clean Yahoo Finance data 
+                       ↓ 
+                OneHotEncoder 
+                       ↓ 
+                Train model 
+                       ↓ 
+          ┌────────────┴────────────┐ 
+          ↓                         ↓ 
+      model.pkl              ticker_encoder.pkl 
+          ↓                         ↓ 
+          └────────────┬────────────┘ 
+                       ↓ 
+                    app.py 
+                       ↑ 
+                       │ 
+                  HTML FORM 
+                       │ 
+        ┌──────────────┼──────────────┐ 
+        ↓              ↓              ↓ 
+      Ticker          Open/High/Low   Volume 
+        ↓ 
+   encoder.transform() 
+        ↓ 
+   [1,0,0] 
+        ↓ 
+   Combine all features 
+        ↓ 
+   model.predict() 
+        ↓ 
+   Predicted Close is it this how much fast

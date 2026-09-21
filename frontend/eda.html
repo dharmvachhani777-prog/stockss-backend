@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockML - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: #EBF0F3;
+            color: #2D3748;
+            padding: 20px 40px;
+        }
+        /* Navigation Bar Styles matching design cards layout */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #FFFFFF;
+            padding: 14px 32px;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            margin-bottom: 40px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1A202C;
+            text-decoration: none;
+        }
+        .logo-icon {
+            color: #E25C34;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #4A5568;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #E25C34;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 18px;
+            background: none;
+            border: none;
+        }
+        .predict-btn {
+            background: #E25C34;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .predict-btn:hover {
+            opacity: 0.9;
+        }
+        /* Shared Container Grid Definitions */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-area">
+            <span class="logo-icon">📈</span> StockML
+        </a>
+        <div class="nav-links">
+            <a href="eda.html">Data Insights</a>
+            <a href="model_info.html">Model Info</a>
+            <a href="#">Disclaimer</a>
+        </div>
+        <div class="nav-actions">
+            <button class="theme-toggle">☀️</button>
+            <a href="predict.html" class="predict-btn">Predict Now ↗</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+<style>
+    .eda-header {
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #1A202C;
+        margin-bottom: 24px;
+        letter-spacing: 0.5px;
+    }
+    .data-source-title {
+        font-size: 16px;
+        color: #4A5568;
+        margin-bottom: 20px;
+    }
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+    .metric-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2D3748;
+        margin-bottom: 4px;
+    }
+    .metric-sub {
+        font-size: 12px;
+        color: #718096;
+        margin-bottom: 16px;
+    }
+    .metric-val {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1A202C;
+    }
+    .split-layout {
+        display: grid;
+        grid-template-columns: 1.6fr 1fr;
+        gap: 20px;
+    }
+    .info-paragraph {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #4A5568;
+        margin-bottom: 16px;
+    }
+    .bullet-list {
+        list-style: none;
+    }
+    .bullet-list li {
+        font-size: 14px;
+        color: #4A5568;
+        margin-bottom: 12px;
+        padding-left: 15px;
+        position: relative;
+    }
+    .bullet-list li::before {
+        content: "•";
+        color: #A0AEC0;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+    .disclaimer-box {
+        margin-top: 30px;
+        font-size: 13px;
+        color: #718096;
+        text-align: center;
+    }
+    .range-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    .range-box {
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .range-title {
+        font-size: 11px;
+        color: #718096;
+        margin-bottom: 4px;
+    }
+    .range-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #2D3748;
+    }
+</style>
+
+<div class="eda-header">EDA Details</div>
+<p class="data-source-title">The data tracking dashboard displays live dimensions parsed directly from your system storage.</p>
+
+<div class="metrics-grid">
+    <div class="card">
+        <div class="metric-label">Raw records</div>
+        <div class="metric-sub">Total rows downloaded</div>
+        <div class="metric-val" id="rawVal">-</div>
+    </div>
+    <div class="card">
+        <div class="metric-label">Rows removed</div>
+        <div class="metric-sub"><span id="pctRemoved">-</span> dropped via cleaning</div>
+        <div class="metric-val" id="removedVal">-</div>
+    </div>
+    <div class="card">
+        <div class="metric-label">Final records</div>
+        <div class="metric-sub">Available for training optimization</div>
+        <div class="metric-val" id="finalVal">-</div>
+    </div>
+</div>
+
+<div class="split-layout">
+    <div class="card">
+        <div class="metric-label" style="margin-bottom: 6px;">Understanding Stock Markets</div>
+        <div class="metric-sub" style="margin-bottom: 20px;">What technical features map price movements and asset trends.</div>
+        
+        <p class="info-paragraph">Stock Market tracking evaluates equity health and trading volume velocities over continuous historical sessions. Price anomalies, extreme split volatility, and macro market changes drive trading risk profiles.</p>
+        
+        <ul class="bullet-list">
+            <li><strong>Impact:</strong> Alters portfolio values, scales strategic investment timelines, and changes capital growth trajectories.</li>
+            <li><strong>Prevention:</strong> Ongoing processing of directional trends cuts drawdown exposures.</li>
+            <li><strong>Model role:</strong> The ML engine spots patterns across historical trading sessions to evaluate forward pricing direction probabilities—optimized for structural insight, not absolute certainty.</li>
+        </ul>
+
+        <div class="disclaimer-box">Predictions are for research/educational use. Consult qualified analysts for asset deployment decisions.</div>
+    </div>
+
+    <div class="card">
+        <div class="metric-label" style="margin-bottom: 4px;">Ideal parameters</div>
+        <div class="metric-sub" style="margin-bottom: 20px;">Common Technical Baselines</div>
+        
+        <div class="range-grid">
+            <div class="range-box">
+                <div class="range-title">RSI Index</div>
+                <div class="range-value">30 – 70 Level</div>
+            </div>
+            <div class="range-box">
+                <div class="range-title">Volatility Z-Score</div>
+                <div class="range-value">&lt; 2.0 Deviation</div>
+            </div>
+            <div class="range-box">
+                <div class="range-title">Daily Vol Change</div>
+                <div class="range-value">10–15% Nominal</div>
+            </div>
+            <div class="range-box">
+                <div class="range-title">Beta Value</div>
+                <div class="range-value">0.8 – 1.5 Range</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch(API_BASE_URL + "/data-insights")
+            .then(response => response.json())
+            .then(res => {
+                if(res.success) {
+                    document.getElementById("rawVal").textContent = res.data.raw_records;
+                    document.getElementById("removedVal").textContent = res.data.rows_removed;
+                    document.getElementById("pctRemoved").textContent = res.data.pct_removed;
+                    document.getElementById("finalVal").textContent = res.data.final_records;
+                }
+            })
+            .catch(error => console.error("Error fetching EDA metrics:", error));
+    });
+</script>
+
+    </div>
+
+</body>
+</html>

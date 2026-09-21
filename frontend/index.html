@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockML - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: #EBF0F3;
+            color: #2D3748;
+            padding: 20px 40px;
+        }
+        /* Navigation Bar Styles matching design cards layout */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #FFFFFF;
+            padding: 14px 32px;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            margin-bottom: 40px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1A202C;
+            text-decoration: none;
+        }
+        .logo-icon {
+            color: #E25C34;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #4A5568;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover {
+            color: #E25C34;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 18px;
+            background: none;
+            border: none;
+        }
+        .predict-btn {
+            background: #E25C34;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .predict-btn:hover {
+            opacity: 0.9;
+        }
+        /* Shared Container Grid Definitions */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+    </style>
+    <script src="config.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo-area">
+            <span class="logo-icon">📈</span> StockML
+        </a>
+        <div class="nav-links">
+            <a href="eda.html">Data Insights</a>
+            <a href="model_info.html">Model Info</a>
+            <a href="#">Disclaimer</a>
+        </div>
+        <div class="nav-actions">
+            <button class="theme-toggle">☀️</button>
+            <a href="predict.html" class="predict-btn">Predict Now ↗</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+<div class="card" style="padding: 60px; text-align: center;">
+    <span style="font-size: 14px; background: #E2E8F0; padding: 4px 12px; border-radius: 12px; font-weight:600; color:#4A5568;">Early Warning System</span>
+    <h1 style="font-size: 48px; margin: 20px 0; font-weight: 800;">Stock Price Risk <span style="color: #E25C34;">Assessment</span></h1>
+    <p style="color: #718096; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6;">Our machine learning architecture reviews historical technical indicators to categorize asset volatilities and future pricing trajectories with gradient boosted systems.</p>
+    <div>
+        <a href="predict.html" class="predict-btn" style="padding: 14px 32px; font-size: 16px; border-radius: 24px;">Start Assessment</a>
+    </div>
+</div>
+
+    </div>
+
+</body>
+</html>
